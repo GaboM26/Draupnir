@@ -49,6 +49,9 @@ def test_or_list_ignores_statement_after_first_name():
 def test_missing_line_item_and_period():
     with pytest.raises(AnalysisError, match="shares outstanding"):
         MODELS["dcf"].calculate("abc", "2010Q2", FINANCIALS.iloc[:4], lambda t, d: 1.0, PARAMS)
+    zero_shares = FINANCIALS.assign(value=FINANCIALS["value"].where(FINANCIALS["tag_renamed"] != "Shares Outstanding", 0.0))
+    with pytest.raises(AnalysisError, match="reported as 0"):
+        MODELS["dcf"].calculate("abc", "2010Q2", zero_shares, lambda t, d: 1.0, PARAMS)
     with pytest.raises(AnalysisError, match="2010Q3"):
         MODELS["dcf"].calculate("abc", "2010Q3", FINANCIALS, lambda t, d: 1.0, PARAMS)
     with pytest.raises(AnalysisError, match="discount rate"):

@@ -57,3 +57,9 @@ def period_end(rows: pd.DataFrame, year: str, quarter: str) -> str:
 
 def parse_data_date(value: str) -> date:
     return datetime.strptime(value, "%Y%m%d").date()
+
+
+def cents(amount: float) -> float:
+    """Round to cents. Models round every intermediate amount, so each displayed step can be
+    recomputed by hand from the steps before it."""
+    return round(amount, 2)

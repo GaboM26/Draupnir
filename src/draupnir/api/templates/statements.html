@@ -7,7 +7,8 @@
   <a href="{{ url_for('main.statements_csv', ticker=ticker, fiscal_period=fiscal_period) }}">Download CSV</a> ·
   <a href="{{ url_for('main.statements_json', ticker=ticker, fiscal_period=fiscal_period) }}">JSON</a> ·
   <a href="{{ url_for('main.valuation', name='dcf', ticker=ticker, period=fiscal_period) }}">DCF valuation</a> ·
-  <a href="{{ url_for('main.valuation', name='pe', ticker=ticker, period=fiscal_period) }}">P/E valuation</a>
+  <a href="{{ url_for('main.valuation', name='pe', ticker=ticker, period=fiscal_period) }}">P/E valuation</a> ·
+  <a href="{{ url_for('main.graham_rating', ticker=ticker) }}">Graham rating</a>
 </p>
 {% for stmt, title in [('BS', 'Balance sheet'), ('IS', 'Income statement'), ('CF', 'Cash flow statement')] %}
   {% set rows = tables[stmt] %}

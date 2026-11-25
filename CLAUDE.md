@@ -29,8 +29,8 @@ no bare `except:` that swallows errors silently. These are never deferred.
 
 ## Status
 
-Ingest, storage, the DCF and P/E models, Yahoo prices and the localhost UI work end to end
-(checked on 2009Q4-2010Q4). Legend: **decide** = needs an owner decision; **risk** = known
+Ingest, storage, the DCF and P/E models, the Graham rating, Yahoo prices and the localhost UI work
+end to end (checked on 2009Q4-2010Q4). Legend: **decide** = needs an owner decision; **risk** = known
 weakness in what exists. Update this list as items land.
 
 ### Open decisions (decide)
@@ -40,6 +40,15 @@ weakness in what exists. Update this list as items land.
 - Fix phase order for the KNOWN-BUG list, and whether to move from data sets to SEC's companyfacts
   JSON API (fixes TICKER-GUESS, EIN-KEY, COREG, the shares scrape; needed anyway for a Vercel deploy).
 - How far back to load (each data set quarter from 2009Q2 onward; later quarters are large).
+
+### Graham rating (services/graham.py)
+
+Follows GrahamValue's quick reference (Intelligent Investor ch. 14-15) on annual (10-K) figures:
+defensive criteria 1-7 + Graham Number, enterprising 1-A..5 + P/E < 10 + Serenity Number, grade per
+GrahamValue's ladder. The module docstring is the spec; "Choice:" comments mark our own decisions.
+Not implemented: NCAV grade, utility/financial substitute tests (flagged by SIC), interest-rate
+adjustment. Multi-year criteria need many 10-K years loaded; the 20-year dividend record cannot be
+confirmed from SEC structured data (starts 2009).
 
 ### Known weaknesses in what exists (risk)
 
@@ -67,6 +76,7 @@ src/draupnir/
     financial.py         #   FinancialRow (one statement line item value)
     valuation.py         #   ValuationResult, Step
     errors.py            #   AnalysisError: expected "no answer" failures shown to the user
+    graham.py            #   Criterion, GrahamCategory, GrahamRating, Outcome (Pass / Fail / Not enough data)
   api/                   # localhost Flask UI + HTTP API: app factory (create_app) + blueprint
     routes.py            #   thin handlers: parse request, call services, render/serialize
     serializers.py       #   models -> JSON / CSV
@@ -74,6 +84,7 @@ src/draupnir/
   services/              # business logic. Receives data and clients as arguments.
     ingest.py            #   raw SEC tables -> FinancialRows Pure pandas.
     storage.py           #   SQLite schema + read/write. Only module that writes SQL.
+    graham.py            #   Graham defensive/enterprising criteria and grade (pure; page /graham)
     valuation/           #   the valuation calculator. Pure: no DB, no network.
       base.py            #     ValuationModel ABC, PriceLookup
       dcf.py, pe.py      #     concrete models; register new ones in MODELS (valuation/__init__.py)

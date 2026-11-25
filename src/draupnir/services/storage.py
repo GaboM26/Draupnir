@@ -88,6 +88,21 @@ def find_company(conn: sqlite3.Connection, ticker: str, period: str) -> dict:
     return company
 
 
+def find_latest_company(conn: sqlite3.Connection, ticker: str) -> dict:
+    """The company row for `ticker` with the latest fiscal period."""
+    cursor = conn.execute(
+        f"SELECT *, {_COMPANY_PERIOD} AS period_key FROM company WHERE instance = ? "
+        "ORDER BY period_key DESC, ein_id LIMIT 1",
+        (ticker,),
+    )
+    row = cursor.fetchone()
+    if row is None:
+        raise AnalysisError(f"Ticker {ticker!r} is not in the database.")
+    company = dict(zip((c[0] for c in cursor.description), row))
+    del company["period_key"]
+    return company
+
+
 def read_company_financials(conn: sqlite3.Connection, ein_id: str) -> pd.DataFrame:
     """All statement rows of one company, in load order."""
     return pd.read_sql_query(

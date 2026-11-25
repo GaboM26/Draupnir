@@ -11,7 +11,7 @@ from flask import Blueprint, Response, abort, current_app, g, redirect, render_t
 from draupnir.api import serializers
 from draupnir.models.errors import AnalysisError
 from draupnir.models.financial import split_fiscal_period
-from draupnir.services import storage
+from draupnir.services import graham, storage
 from draupnir.services.valuation import MODELS
 
 bp = Blueprint("main", __name__)
@@ -124,6 +124,20 @@ def _parse_params(form: dict, defaults: dict[str, float]) -> dict[str, float]:
         except ValueError:
             raise AnalysisError(f"{key} must be a number, got {form[key]!r}.") from None
     return params
+
+
+@bp.get("/graham")
+def graham_rating():
+    ticker = request.args.get("ticker", "").strip().lower()
+    if not ticker:
+        return render_template("graham.html", ticker="")
+    try:
+        company = storage.find_latest_company(_db(), ticker)
+        financials = storage.read_company_financials(_db(), company["ein_id"])
+        rating = graham.rate(ticker, company["name"], company["sic"], financials, current_app.config["DRAUPNIR_PRICE"])
+    except AnalysisError as exc:
+        return render_template("graham.html", ticker=ticker, message=str(exc)), 404
+    return render_template("graham.html", ticker=ticker, rating=rating)
 
 
 @bp.get("/data_manual")

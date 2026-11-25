@@ -27,3 +27,13 @@ td.formula { font-family: ui-monospace, monospace; font-size: 0.85em; color: var
 dl.summary { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; }
 dl.summary dd { margin: 0; font-weight: 600; }
 small { font-weight: normal; color: var(--muted); }
+.badge { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 0.85em; font-weight: 600; border: 1px solid currentColor; white-space: nowrap; }
+.badge.pass { color: #1a7f37; }
+.badge.fail { color: #c62828; }
+.badge.unknown { color: var(--muted); }
+@media (prefers-color-scheme: dark) {
+  .badge.pass { color: #4ac26b; }
+  .badge.fail { color: #ff7b72; }
+}
+section h2 { margin-top: 32px; }
+.formula { font-family: ui-monospace, monospace; font-size: 0.85em; color: var(--muted); }

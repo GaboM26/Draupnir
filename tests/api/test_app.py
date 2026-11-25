@@ -58,3 +58,10 @@ def test_valuation_page(client):
 @pytest.mark.parametrize("path", ["/ticker_search", "/data_manual", "/compounding_interest"])
 def test_static_pages(client, path):
     assert client.get(path).status_code == 200
+
+
+def test_graham_page(client):
+    assert client.get("/graham").status_code == 200
+    page = client.get("/graham?ticker=abc")
+    assert page.status_code == 404 and b"annual" in page.data   # fixture has quarterly rows only
+    assert client.get("/graham?ticker=zzz").status_code == 404

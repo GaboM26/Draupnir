@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}{{ (ticker|upper ~ ' ') if ticker }}Graham rating · Draupnir{% endblock %}
+{% macro badge(outcome) -%}
+  <span class="badge {{ outcome.name|lower }}">{{ outcome.value }}</span>
+{%- endmacro %}
+{% macro criteria_table(criteria) %}
+<div class="scroll"><table>
+  <thead><tr><th>#</th><th>Criterion</th><th>Found</th><th>Result</th></tr></thead>
+  <tbody>
+  {% for c in criteria %}
+    <tr><td>{{ c.number }}</td><td>{{ c.rule }}</td><td>{{ c.found }}</td><td>{{ badge(c.outcome) }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+{% endmacro %}
+{% block content %}
+<h1>Graham rating</h1>
+<p>Benjamin Graham's criteria for the defensive and the enterprising investor (<cite>The Intelligent Investor</cite>,
+chapters 14 and 15), applied to the latest fiscal year loaded. Each criterion is Pass, Fail, or Not enough data.</p>
+<form method="get" action="{{ url_for('main.graham_rating') }}">
+  <label>Ticker <input name="ticker" value="{{ ticker }}" required autocomplete="off"></label>
+  <button type="submit">Rate</button>
+</form>
+
+{% if rating %}
+<h2>{{ rating.company_name }} ({{ rating.ticker|upper }}), FY{{ rating.fiscal_year }}</h2>
+<dl class="summary">
+  <dt>Graham grade</dt><dd>{{ rating.grade }}</dd>
+  <dt>Price{% if rating.price_date %} on {{ rating.price_date }}{% endif %}</dt>
+  <dd>{{ '$%.2f'|format(rating.current_price) if rating.current_price is not none else 'not available' }}</dd>
+  <dt>Fiscal years loaded</dt>
+  <dd>{% if rating.years_loaded %}FY{{ rating.years_loaded|first }}–FY{{ rating.years_loaded|last }} ({{ rating.years_loaded|length }}){% endif %}</dd>
+</dl>
+
+{% for category in [rating.defensive, rating.enterprising] %}
+<section>
+  <h2>{{ category.name }}: {{ badge(category.quality_outcome) }}</h2>
+  <h3>Quality criteria (decide the grade)</h3>
+  {{ criteria_table(category.quality) }}
+  <h3>Price criteria: {{ badge(category.price_outcome) }}</h3>
+  {{ criteria_table(category.price) }}
+  <p>
+    <strong>{{ category.intrinsic_value_name }}:</strong>
+    {% if category.intrinsic_value is not none %}${{ '%.2f'|format(category.intrinsic_value) }}{% else %}not computable{% endif %}
+    <span class="formula">= {{ category.intrinsic_value_formula }}</span>
+    {% if category.intrinsic_value_pct is not none %}
+      <br>Intrinsic value is <strong>{{ '%.0f'|format(category.intrinsic_value_pct * 100) }}%</strong> of the price
+      ({{ 'at or below intrinsic value' if category.intrinsic_value_pct >= 1 else 'above intrinsic value' }}).
+    {% endif %}
+  </p>
+</section>
+{% endfor %}
+
+<h2>Notes</h2>
+<ul>
+  {% for note in rating.notes %}<li>{{ note }}</li>{% endfor %}
+  <li>Criteria follow GrahamValue's quick reference: $500 million minimum sales (Graham's $100 million adjusted for
+    inflation), earnings growth over ten years on three-year averages, and enterprising earnings growth compared
+    with four years earlier. The NCAV (net-net) grade is not computed.</li>
+  <li>SEC structured data starts in 2009, so the 20-year dividend record cannot be confirmed from it.</li>
+</ul>
+{% endif %}
+{% endblock %}

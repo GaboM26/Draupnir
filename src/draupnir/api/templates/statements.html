@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ ticker|upper }} {{ fiscal_period }} · Draupnir{% endblock %}
+{% block content %}
+<h1>{{ company.name }} <small>({{ ticker|upper }})</small></h1>
+<p>Fiscal period {{ fiscal_period }}, period ending {{ period_end }}. EIN {{ company.ein_id }}, CIK {{ company.cik_id }}.</p>
+<p>
+  <a href="{{ url_for('main.statements_csv', ticker=ticker, fiscal_period=fiscal_period) }}">Download CSV</a> ·
+  <a href="{{ url_for('main.statements_json', ticker=ticker, fiscal_period=fiscal_period) }}">JSON</a> ·
+  <a href="{{ url_for('main.valuation', name='dcf', ticker=ticker, period=fiscal_period) }}">DCF valuation</a> ·
+  <a href="{{ url_for('main.valuation', name='pe', ticker=ticker, period=fiscal_period) }}">P/E valuation</a>
+</p>
+{% for stmt, title in [('BS', 'Balance sheet'), ('IS', 'Income statement'), ('CF', 'Cash flow statement')] %}
+  {% set rows = tables[stmt] %}
+  <h2>{{ title }}</h2>
+  {% if rows.empty %}<p>Not reported for this period.</p>{% else %}
+  <div class="scroll"><table>
+    <thead><tr><th>Line item</th><th>Filer's label</th><th class="num">Value</th><th>Unit</th><th>Period</th><th>Quarters</th></tr></thead>
+    <tbody>
+    {% for row in rows.itertuples() %}
+      <tr{% if row.line_item == 'yes' %} class="total"{% endif %}>
+        <td>{{ row.tag_renamed }}</td><td>{{ row.label_sec or '' }}</td>
+        <td class="num">{{ '{:,.2f}'.format(row.value) if row.value == row.value else '' }}</td>
+        <td>{{ row.uom or '' }}</td><td>{{ row.fy }}{{ row.fq }}</td><td>{{ row.qtrs }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% endif %}
+{% endfor %}
+{% endblock %}

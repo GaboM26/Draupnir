@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ model.label }} · Draupnir{% endblock %}
+{% block content %}
+<h1>{{ model.label }}</h1>
+<form method="get" action="{{ url_for('main.valuation', name=model.name) }}" class="params">
+  <label>Ticker <input name="ticker" value="{{ form.ticker }}" required autocomplete="off"></label>
+  <label>Fiscal period <input name="period" value="{{ form.period }}" pattern="\d{4}Q[1-4]" required></label>
+  {% for key in params %}
+    <label>{{ key|replace('_', ' ')|capitalize }} <input name="{{ key }}" value="{{ form[key] }}" inputmode="decimal" required></label>
+  {% endfor %}
+  <button type="submit">Value</button>
+</form>
+<p class="hint">Rates are fractions (0.09 = 9%). Years is the projection horizon.</p>
+{% if result %}
+<h2>{{ company.name }} ({{ result.ticker|upper }}), {{ result.fiscal_period }}</h2>
+<dl class="summary">
+  <dt>Price on {{ result.price_date }}</dt><dd>${{ '%.2f'|format(result.current_price) }}</dd>
+  <dt>Intrinsic value per share</dt><dd>${{ '%.2f'|format(result.intrinsic_value) }}</dd>
+  <dt>Verdict</dt><dd>{{ result.verdict }}</dd>
+</dl>
+<div class="scroll"><table>
+  <thead><tr><th>Step</th><th class="num">Value</th><th>Calculation</th></tr></thead>
+  <tbody>
+  {% for step in result.steps %}
+    <tr><td>{{ step.label }}</td><td class="num">{{ '{:,.2f}'.format(step.value) }}</td><td class="formula">{{ step.formula }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+<p class="hint">These models have known flaws, to be fixed
+(e.g. one quarter of cash flow instead of twelve months, P/E from quarterly EPS). Treat results as a sketch.</p>
+{% endif %}
+{% endblock %}

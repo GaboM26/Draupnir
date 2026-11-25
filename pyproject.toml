@@ -1,0 +1,27 @@
+[project]
+name = "draupnir"
+version = "0.1.0"
+description = "Fundamental stock analysis on SEC EDGAR data"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.0",
+    "lxml>=5",
+    "pandas>=2.2",
+    "requests>=2.32",
+    "yfinance>=0.2.40",
+]
+
+[project.scripts]
+draupnir = "draupnir.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--import-mode=importlib"]

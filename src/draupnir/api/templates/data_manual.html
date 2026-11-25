@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Data manual · Draupnir{% endblock %}
+{% block content %}
+<h1>Data manual</h1>
+<h2>Where the numbers come from</h2>
+<p>Every figure comes from the SEC's quarterly Financial Statement Data Sets: the XBRL facts companies file with
+their 10-K and 10-Q reports. Each loaded quarter adds the filings submitted during that quarter.</p>
+<h2>Columns</h2>
+<dl>
+  <dt>Line item</dt><dd>A readable name for the XBRL tag. Common tags get a curated name; the rest are the tag split into words.</dd>
+  <dt>Filer's label</dt><dd>The label the company itself used on its statement.</dd>
+  <dt>Value</dt><dd>The reported amount, in the unit shown (USD, shares, or USD per share).</dd>
+  <dt>Period</dt><dd>Fiscal year and quarter the filing reports. FY marks an annual report.</dd>
+  <dt>Quarters</dt><dd>How many quarters the value spans. 0 means a single quarter or a balance at a point in time;
+    4 means a full fiscal year. Companies report cash flows year-to-date and the fourth quarter only as the full year,
+    so Draupnir derives single-quarter values by subtracting the previous cumulative figure.</dd>
+</dl>
+<h2>Tickers and periods</h2>
+<p>A ticker is guessed from the name of the filing's XBRL file, so it is usually, not always, the exchange ticker.
+Fiscal periods follow each company's own fiscal year, which need not match the calendar year.</p>
+<h2>Downloads</h2>
+<p>Each statement page can be downloaded as CSV, or fetched as JSON from <code>/REST/&lt;ticker&gt;_&lt;period&gt;</code>.</p>
+{% endblock %}

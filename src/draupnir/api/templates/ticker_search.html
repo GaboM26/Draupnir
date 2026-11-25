@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Tickers · Draupnir{% endblock %}
+{% block content %}
+<h1>Loaded companies</h1>
+<p>{{ companies|length }} companies. Tickers come from the filing's XBRL file name, so a few may differ from the exchange ticker.</p>
+<input type="search" id="filter" placeholder="Filter by name or ticker" aria-label="Filter companies">
+<div class="scroll"><table id="companies">
+  <thead><tr><th>Company</th><th>Ticker</th><th>Latest period</th></tr></thead>
+  <tbody>
+  {% for row in companies.itertuples() %}
+    <tr><td>{{ row.name }}</td>
+      <td><a href="{{ url_for('main.statements', ticker=row.ticker, fiscal_period=row.period) }}">{{ row.ticker }}</a></td>
+      <td>{{ row.period }}</td></tr>
+  {% endfor %}
+  </tbody>
+</table></div>
+<script>
+  document.getElementById("filter").addEventListener("input", (event) => {
+    const needle = event.target.value.toLowerCase();
+    for (const row of document.querySelectorAll("#companies tbody tr")) {
+      row.hidden = !row.textContent.toLowerCase().includes(needle);
+    }
+  });
+</script>
+{% endblock %}

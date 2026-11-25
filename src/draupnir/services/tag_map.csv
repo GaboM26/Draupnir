@@ -1,0 +1,55 @@
+stmt,tag,name,line_item
+BS,CashAndCashEquivalentsAtCarryingValue,Cash And Cash Equivalents,no
+BS,ShortTermInvestments,Short-Term Investments,no
+BS,MarketableSecuritiesCurrent,Marketable Securities (Current),no
+BS,AccountsReceivableNetCurrent,Accounts Receivable (Current),no
+BS,InventoryNet,Inventory,no
+BS,PrepaidExpenseCurrent,Prepaid Expenses (Current),no
+BS,OtherAssetsCurrent,Other Assets (Current),no
+BS,AssetsCurrent,Total Current Assets,yes
+BS,PropertyPlantAndEquipmentNet,"Property, Plant And Equipment, Net",no
+BS,Goodwill,Goodwill,no
+BS,IntangibleAssetsNetExcludingGoodwill,"Intangible Assets, Net",no
+BS,OtherAssetsNoncurrent,Other Assets (Non-current),no
+BS,Assets,Total Assets,yes
+BS,AccountsPayableCurrent,Accounts Payable (Current),no
+BS,AccruedLiabilitiesCurrent,Accrued Liabilities (Current),no
+BS,LongTermDebtCurrent,Long-Term Debt (Current),no
+BS,LiabilitiesCurrent,Total Current Liabilities,yes
+BS,LongTermDebtNoncurrent,Long-Term Debt (Non-current),no
+BS,OtherLiabilitiesNoncurrent,Other Liabilities (Non-current),no
+BS,Liabilities,Total Liabilities,yes
+BS,CommonStockValue,Common Stock,no
+BS,RetainedEarningsAccumulatedDeficit,Retained Earnings,no
+BS,AccumulatedOtherComprehensiveIncomeLossNetOfTax,Accumulated Other Comprehensive Income,no
+BS,StockholdersEquity,Total Stockholders' Equity,yes
+BS,LiabilitiesAndStockholdersEquity,Total Liabilities And Equity,yes
+IS,Revenues,Total Revenue,yes
+IS,SalesRevenueNet,Net Sales,yes
+IS,CostOfRevenue,Cost Of Revenue,no
+IS,CostOfGoodsSold,Cost Of Goods Sold,no
+IS,GrossProfit,Gross Profit,yes
+IS,ResearchAndDevelopmentExpense,Research And Development,no
+IS,SellingGeneralAndAdministrativeExpense,"Selling, General And Administrative",no
+IS,OperatingExpenses,Total Operating Expenses,yes
+IS,OperatingIncomeLoss,Operating Income,yes
+IS,InterestExpense,Interest Expense,no
+IS,IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest,Income Before Taxes,yes
+IS,IncomeTaxExpenseBenefit,Income Tax Expense,no
+IS,NetIncomeLoss,Net Income,yes
+IS,EarningsPerShareBasic,EPS (Basic),no
+IS,EarningsPerShareDiluted,EPS (Diluted),no
+IS,WeightedAverageNumberOfSharesOutstandingBasic,Weighted Average Shares (Basic),no
+IS,WeightedAverageNumberOfDilutedSharesOutstanding,Weighted Average Shares (Diluted),no
+IS,CommonStockDividendsPerShareDeclared,Dividends Per Share,no
+CF,NetIncomeLoss,Net Income,no
+CF,DepreciationDepletionAndAmortization,Depreciation And Amortization,no
+CF,ShareBasedCompensation,Stock-Based Compensation,no
+CF,NetCashProvidedByUsedInOperatingActivities,Cash From Operating Activities,yes
+CF,PaymentsToAcquirePropertyPlantAndEquipment,Capital Expenditures,no
+CF,NetCashProvidedByUsedInInvestingActivities,Cash From Investing Activities,yes
+CF,PaymentsForRepurchaseOfCommonStock,Share Repurchases,no
+CF,PaymentsOfDividends,Dividends Paid,no
+CF,NetCashProvidedByUsedInFinancingActivities,Cash From Financing Activities,yes
+CF,CashAndCashEquivalentsPeriodIncreaseDecrease,Net Change In Cash,yes
+CF,CashAndCashEquivalentsEndingBalances,Cash And Cash Equivalents (End Of Period),yes

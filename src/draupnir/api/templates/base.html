@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Draupnir{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <a class="brand" href="{{ url_for('main.index') }}">Draupnir</a>
+    <nav>
+      <a href="{{ url_for('main.index') }}">Statements</a>
+      <a href="{{ url_for('main.ticker_search') }}">Tickers</a>
+      <a href="{{ url_for('main.valuation', name='dcf') }}">DCF</a>
+      <a href="{{ url_for('main.valuation', name='pe') }}">P/E</a>
+      <a href="{{ url_for('main.data_manual') }}">Data manual</a>
+      <a href="{{ url_for('main.compounding_interest') }}">Compounding</a>
+    </nav>
+  </header>
+  <main>
+    {% if message %}<p class="message" role="alert">{{ message }}</p>{% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Financial statements</h1>
+<p>Look up a company's balance sheet, income statement and cash flow statement for one fiscal quarter,
+taken from SEC filings. Single-quarter values are shown; Q4 also shows the full fiscal year.</p>
+<form method="get" action="{{ url_for('main.index') }}">
+  <label>Ticker <input name="ticker" value="{{ ticker or '' }}" required autocomplete="off"></label>
+  <label>Fiscal period <input name="period" value="{{ period }}" pattern="\d{4}Q[1-4]" required></label>
+  <button type="submit">Show statements</button>
+</form>
+<p>Not sure of the ticker? See <a href="{{ url_for('main.ticker_search') }}">every loaded company</a>.</p>
+{% endblock %}

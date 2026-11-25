@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Compounding · Draupnir{% endblock %}
+{% block content %}
+<h1>Compounding and discounting</h1>
+<p>Both valuation models rest on one idea: money grows at a rate, and money expected later is worth less today.</p>
+<h2>Growing a value</h2>
+<p>A value <var>V</var> growing at rate <var>r</var> per year for <var>n</var> years becomes
+<code>V × (1 + r)<sup>n</sup></code>. At 9% a year, 100 becomes about 154 in five years and 237 in ten.</p>
+<h2>Discounting a future value</h2>
+<p>Run backwards, the same formula gives a present value: <code>V<sub>today</sub> = V<sub>future</sub> ÷ (1 + r)<sup>n</sup></code>.
+The rate <var>r</var> is the return you require. A higher required return makes future cash worth less now.</p>
+<h2>How the models use it</h2>
+<ul>
+  <li><strong>DCF</strong> grows free cash flow for several years, discounts each year back to today, and adds a terminal
+    value for every year after: <code>CF × (1 + g) ÷ (r − g)</code>, which needs <var>r</var> greater than <var>g</var>.</li>
+  <li><strong>P/E</strong> grows earnings per share, multiplies by a typical P/E ratio to get a future price,
+    and discounts that price back to today.</li>
+</ul>
+<h2>Try it</h2>
+<form id="calc" class="params">
+  <label>Amount <input name="v" value="100" inputmode="decimal"></label>
+  <label>Rate <input name="r" value="0.09" inputmode="decimal"></label>
+  <label>Years <input name="n" value="5" inputmode="numeric"></label>
+</form>
+<p id="calc-out" aria-live="polite"></p>
+<script>
+  const form = document.getElementById("calc");
+  const out = document.getElementById("calc-out");
+  function update() {
+    const v = Number(form.v.value), r = Number(form.r.value), n = Number(form.n.value);
+    const f = (1 + r) ** n;
+    out.textContent = [v, r, n, f].every(Number.isFinite)
+      ? `Grown: ${(v * f).toFixed(2)}. Discounted to today: ${(v / f).toFixed(2)}.`
+      : "Enter numbers.";
+  }
+  form.addEventListener("input", update);
+  update();
+</script>
+{% endblock %}
